@@ -12,8 +12,17 @@ spring:
     port: 5672
     username: root
     password: root
+  redis:
+    host: 47.99.240.244
+    port: 6379
+    database: 1
+    password: 123456
+    pool:
+      max-active: 8           #连接池最大连接数
+      max-wait: 1             #连接池最大阻塞等待时间
+      max-idle: 8             #连接池最大空闲链接
+      min-idle: 0             #连接池最小空闲链接
+    timeout: 20000            #连接超时时间
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
-
-# 测试git提交
