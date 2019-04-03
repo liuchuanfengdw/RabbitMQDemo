@@ -1,9 +1,13 @@
 package com.dw.helloworld.rest;
 
+import com.dw.helloworld.entity.vo.UserVo;
 import com.dw.helloworld.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -33,4 +37,10 @@ public class HelloWorldController {
     public List<Map<String,Object>> findAllUser(){
         return userService.findAllUser();
     }
+
+    @GetMapping(value = "/getUser")
+    public UserVo findByUserId(@RequestParam("userId") Long userId){
+        return userService.findByUserId(userId);
+    }
+
 }

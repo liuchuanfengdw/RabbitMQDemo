@@ -1,5 +1,8 @@
 package com.dw.helloworld.config;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -28,13 +33,13 @@ public class RedisConfig {
     private Integer port;
     @Value("${spring.redis.password}")
     private String password;
-    @Value("${spring.redis.max-active}")
+    @Value("${spring.redis.pool.max-active}")
     private int maxActive;
-    @Value("${spring.redis.max-wait}")
+    @Value("${spring.redis.pool.max-wait}")
     private int maxWait;
-    @Value("${spring.redis.max-idle}")
+    @Value("${spring.redis.pool.max-idle}")
     private int maxIdle;
-    @Value("${spring.min-idle}")
+    @Value("${spring.redis.pool.min-idle}")
     private int minIdle;
     @Value("${spring.redis.database}")
     private int database;
@@ -79,16 +84,21 @@ public class RedisConfig {
         return connectionFactory;
     }
 
-    public RedisTemplate<String,Object> redisTemplate(@Qualifier(value = "jedisConnectionFactory") JedisConnectionFactory jedisConnectionFactory){
+    @Bean(name = "redisTemplate")
+    public RedisTemplate<String,Object> redisTemplate(@Qualifier(value = "jedisConnectionFactory") RedisConnectionFactory factory){
         logger.info("【初始化RedisTemplate】");
         RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(jedisConnectionFactory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setConnectionFactory(factory);
+        //使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
+        Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer(Object.class);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        serializer.setObjectMapper(mapper);
+        redisTemplate.setValueSerializer(serializer);
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new EntityRedisSerializer());
-        redisTemplate.setValueSerializer(new EntityRedisSerializer());
-        redisTemplate.afterPropertiesSet();
-        redisTemplate.setEnableTransactionSupport(true);
+        //使用StringRedisSerializer来序列化和反序列化redis的key值
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
         return redisTemplate;
     }
 

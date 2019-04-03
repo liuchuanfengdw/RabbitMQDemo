@@ -11,4 +11,7 @@
         select * from user
     </select>
 
+    <select id="findById" parameterType="long" resultType="com.dw.helloworld.entity.dobean.UserDo">
+        select * from user where id = #{id}
+    </select>
 </mapper>

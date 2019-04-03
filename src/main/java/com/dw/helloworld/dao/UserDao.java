@@ -18,5 +18,5 @@ public interface UserDao {
 
     List<Map<String,Object>> findAll();
 
-
+    UserDo findById(Long id);
 }
