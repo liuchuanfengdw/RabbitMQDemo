@@ -1,5 +1,6 @@
 package com.dw.helloworld.rest;
 
+import com.dw.helloworld.baseBean.ResultBean;
 import com.dw.helloworld.entity.vo.UserVo;
 import com.dw.helloworld.service.UserService;
 import io.swagger.annotations.Api;
@@ -38,9 +39,9 @@ public class HelloWorldController {
         return userService.findAllUser();
     }
 
-    @GetMapping(value = "/getUser")
-    public UserVo findByUserId(@RequestParam("userId") Long userId){
-        return userService.findByUserId(userId);
+    @GetMapping(value = "/get_user_by_id")
+    public ResultBean findByUserId(@RequestParam("userId") Long userId){
+        return new ResultBean().success("查询成功",userService.findByUserId(userId));
     }
 
 }

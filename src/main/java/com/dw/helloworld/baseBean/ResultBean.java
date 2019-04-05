@@ -19,4 +19,18 @@ public class ResultBean<T> {
     private String msg;
 
     private T data;
+
+    public ResultBean success(String msg,T data){
+        this.code = 200;
+        this.msg = msg;
+        this.data = data;
+        return this;
+    }
+
+    public ResultBean faild(String msg,T data){
+        this.code = 0;
+        this.msg = msg;
+        this.data = data;
+        return this;
+    }
 }

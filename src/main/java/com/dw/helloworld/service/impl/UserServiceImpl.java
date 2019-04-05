@@ -5,7 +5,8 @@ import com.dw.helloworld.entity.dobean.UserDo;
 import com.dw.helloworld.entity.dto.UserDto;
 import com.dw.helloworld.entity.vo.UserVo;
 import com.dw.helloworld.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -16,18 +17,20 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Description: TODO
+ * @Description: 用户业务层
  * @Author: DING WEI
  * @Date: 2019-03-30 11:19
  */
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private UserDao userDao;
 
-    @Resource
-    private RedisTemplate<String,Object> redisTemplate;
+    @Resource(name = "dwRedisTemplate")
+    private RedisTemplate redisTemplate;
 
     public UserDo dto2Do(UserDto userDto){
         UserDo userDo = new UserDo();
@@ -56,14 +59,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVo findByUserId(Long userId) {
         if(redisTemplate.opsForHash().hasKey("user",userId+"")){
-            System.out.println("【走redis缓存取数据】");
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                Map<Object,Object> map = redisTemplate.opsForHash().entries("user");
-                return objectMapper.convertValue(map,UserVo.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            logger.info("【走redis缓存取数据】");
+            UserVo userVo = (UserVo) redisTemplate.opsForHash().get("user",userId+"");
+            return userVo;
         }
         UserDo userDo = userDao.findById(userId);
         UserVo userVo = do2Vo(userDo);
