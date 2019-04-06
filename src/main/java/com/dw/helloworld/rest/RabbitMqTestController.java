@@ -27,4 +27,10 @@ public class RabbitMqTestController {
     public void sendMsg(@RequestBody UserDto userDto){
         msgProducer.sendMsg(userDto);
     }
+
+    @PostMapping("send_user_queueb")
+    @ApiOperation("通过mq批量保存用户")
+    public void sendMsgByQueueB(@RequestBody UserDto userDto){
+        msgProducer.sendMsgByQueueB(userDto);
+    }
 }

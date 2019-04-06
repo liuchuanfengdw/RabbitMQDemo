@@ -104,6 +104,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue queueB(){
+        return new Queue(QUEUE_B,true);
+    }
+
+    @Bean
     public Binding binding(){
         return BindingBuilder.bind(queueA()).to(defaultExchange()).with(ROUTINGKEY_A);
     }

@@ -52,6 +52,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Integer saveBatch(List<UserDo> list) {
+        return userDao.saveBatch(list);
+    }
+
+
+    @Override
     public List<Map<String, Object>> findAllUser() {
         return userDao.findAll();
     }

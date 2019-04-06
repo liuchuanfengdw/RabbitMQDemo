@@ -7,6 +7,13 @@
         insert into user (id,name,age) values (null,#{name},#{age})
     </insert>
 
+    <insert id="saveBatch" parameterType="list">
+        insert into user (id,name,age) values
+        <foreach collection="list" item="user" separator=",">
+            (null,#{user.name},#{user.age})
+        </foreach>
+    </insert>
+
     <select id="findAll" resultType="map">
         select * from user
     </select>

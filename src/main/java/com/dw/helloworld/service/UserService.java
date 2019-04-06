@@ -1,5 +1,6 @@
 package com.dw.helloworld.service;
 
+import com.dw.helloworld.entity.dobean.UserDo;
 import com.dw.helloworld.entity.dto.UserDto;
 import com.dw.helloworld.entity.vo.UserVo;
 
@@ -14,6 +15,8 @@ import java.util.Map;
 public interface UserService {
 
     Long saveUser(UserDto userDto);
+
+    Integer saveBatch(List<UserDo> list);
 
     List<Map<String,Object>> findAllUser();
 

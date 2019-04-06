@@ -2,6 +2,7 @@ package com.dw.helloworld.dao;
 
 import com.dw.helloworld.entity.dobean.UserDo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import java.util.Map;
 public interface UserDao {
 
     Long save(UserDo userDo);
+
+    Integer saveBatch(@Param("list") List<UserDo> list);
 
     List<Map<String,Object>> findAll();
 

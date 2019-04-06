@@ -1,5 +1,6 @@
 package com.dw.helloworld.config;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dw.helloworld.entity.dto.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +51,10 @@ public class MsgProducer implements RabbitTemplate.ConfirmCallback {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendMsgByQueueB(UserDto userDto){
+        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_B, JSONObject.toJSONString(userDto));
     }
 
     @Override
