@@ -1,7 +1,9 @@
 package com.dw.helloworld;
 
+import com.github.tobato.fastdfs.FdfsClientConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
@@ -12,6 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @SpringBootApplication
 @EnableSwagger2
+@Import(FdfsClientConfig.class)
 public class HelloworldApplication {
 
     public static void main(String[] args) {

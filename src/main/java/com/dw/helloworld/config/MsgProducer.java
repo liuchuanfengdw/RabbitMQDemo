@@ -1,7 +1,7 @@
 package com.dw.helloworld.config;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dw.helloworld.entity.dto.UserDto;
+import com.dw.helloworld.entity.dto.LoginDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -37,12 +37,12 @@ public class MsgProducer implements RabbitTemplate.ConfirmCallback {
         rabbitTemplate.setConfirmCallback(this);
     }
 
-    public void sendMsg(UserDto userDto){
+    public void sendMsg(LoginDto loginDto){
         CorrelationData correlationDataId = new CorrelationData(UUID.randomUUID().toString().replaceAll("-",""));
         // 把消息放进队列QUEUE_A
         ObjectMapper mapper = new ObjectMapper();
         try {
-            String content = mapper.writeValueAsString(userDto);
+            String content = mapper.writeValueAsString(loginDto);
             try {
                 rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_A,RabbitMQConfig.ROUTINGKEY_A,content.getBytes("utf-8"),correlationDataId);
             } catch (UnsupportedEncodingException e) {
@@ -53,8 +53,8 @@ public class MsgProducer implements RabbitTemplate.ConfirmCallback {
         }
     }
 
-    public void sendMsgByQueueB(UserDto userDto){
-        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_B, JSONObject.toJSONString(userDto));
+    public void sendMsgByQueueB(LoginDto loginDto){
+        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_B, JSONObject.toJSONString(loginDto));
     }
 
     @Override

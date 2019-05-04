@@ -1,6 +1,5 @@
 package com.dw.helloworld.entity.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -20,18 +19,17 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ToString
 @ApiModel("用户传输数据")
-public class UserDto implements Serializable {
+public class LoginDto implements Serializable {
 
     private static final long serialVersionUID = -6866912306569491255L;
 
-    @JsonIgnore
-    @ApiModelProperty("主键")
-    private Long id;
+    @ApiModelProperty("用户名")
+    private String username;
 
-    @ApiModelProperty("姓名")
-    private String name;
+    @ApiModelProperty("密码")
+    private String password;
 
-    @ApiModelProperty("年龄")
-    private Integer age;
+    @ApiModelProperty("设备号")
+    private String cid;
 
 }

@@ -37,7 +37,7 @@ public class HelloWorldController {
     }
 
     @GetMapping(value = "/get_user_by_id")
-    public ResultBean findByUserId(@RequestParam("userId") Long userId){
+    public ResultBean findByUserId(@RequestParam("userId") String userId){
         return new ResultBean().success("查询成功",userService.findByUserId(userId));
     }
 

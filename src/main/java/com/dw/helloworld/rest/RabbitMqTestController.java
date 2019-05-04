@@ -1,7 +1,7 @@
 package com.dw.helloworld.rest;
 
 import com.dw.helloworld.config.MsgProducer;
-import com.dw.helloworld.entity.dto.UserDto;
+import com.dw.helloworld.entity.dto.LoginDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,13 +24,13 @@ public class RabbitMqTestController {
 
     @PostMapping("send_msg_mq")
     @ApiOperation("发送消息")
-    public void sendMsg(@RequestBody UserDto userDto){
-        msgProducer.sendMsg(userDto);
+    public void sendMsg(@RequestBody LoginDto loginDto){
+        msgProducer.sendMsg(loginDto);
     }
 
     @PostMapping("send_user_queueb")
     @ApiOperation("通过mq批量保存用户")
-    public void sendMsgByQueueB(@RequestBody UserDto userDto){
-        msgProducer.sendMsgByQueueB(userDto);
+    public void sendMsgByQueueB(@RequestBody LoginDto loginDto){
+        msgProducer.sendMsgByQueueB(loginDto);
     }
 }

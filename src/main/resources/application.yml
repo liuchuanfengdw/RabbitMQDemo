@@ -2,11 +2,20 @@ server:
   port: 9100
 
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp
+      suffix: .jsp
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://47.99.240.244:3306/test?useSSL=false
+#    username: root
+#    password: dw@lrrAnd1314
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.99.240.244:3306/test?useSSL=false
+    url: jdbc:mysql://192.168.1.102:3306/wei_chat?useSSL=false
     username: root
-    password: dw@lrrAnd1314
+    password: root
   rabbitmq:
     host: 47.99.240.244
     port: 5672
@@ -26,3 +35,14 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
+
+fdfs:
+  connect-timeout: 600
+  so-timeout: 1500
+  tracker-list: 192.168.1.105:22122
+  thumb-image:
+    height: 150
+    width: 150
+  resHost: 192.168.1.105
+  pool:
+    jmx-enabled: false

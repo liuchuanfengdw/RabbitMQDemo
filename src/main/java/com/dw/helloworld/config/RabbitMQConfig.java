@@ -1,6 +1,6 @@
 package com.dw.helloworld.config;
 
-import com.dw.helloworld.entity.dto.UserDto;
+import com.dw.helloworld.entity.dto.LoginDto;
 import com.dw.helloworld.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
@@ -141,11 +141,11 @@ public class RabbitMQConfig {
                 channel.basicQos(1);
                 ObjectMapper objectMapper = new ObjectMapper();
                 String msg = new String(message.getBody());
-                UserDto userDto = objectMapper.readValue(msg.getBytes("utf-8"),UserDto.class);
+                LoginDto loginDto = objectMapper.readValue(msg.getBytes("utf-8"), LoginDto.class);
                 logger.info("消费队列A的消息:"+msg);
-                logger.info("消费队列A的消息对象:"+userDto.toString());
+                logger.info("消费队列A的消息对象:"+ loginDto.toString());
                 // 保存userdto到数据库
-                userService.saveUser(userDto);
+                userService.saveUser(loginDto);
                 /**
                  * 为了保证永远不会丢失消息，RabbitMQ支持消息应答机制。
                  * 当消费者接收到消息并完成任务后会往RabbitMQ服务器发送一条确认的命令，

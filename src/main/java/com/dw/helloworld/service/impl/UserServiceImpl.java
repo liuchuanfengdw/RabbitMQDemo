@@ -1,10 +1,13 @@
 package com.dw.helloworld.service.impl;
 
+import com.dw.helloworld.baseBean.ResultBean;
 import com.dw.helloworld.dao.UserDao;
 import com.dw.helloworld.entity.dobean.UserDo;
-import com.dw.helloworld.entity.dto.UserDto;
-import com.dw.helloworld.entity.vo.UserVo;
+import com.dw.helloworld.entity.dto.LoginDto;
+import com.dw.helloworld.entity.vo.LoginVo;
 import com.dw.helloworld.service.UserService;
+import com.dw.helloworld.utils.MD5Utils;
+import com.dw.helloworld.utils.SnowflakeIdWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -32,23 +35,39 @@ public class UserServiceImpl implements UserService {
     @Resource(name = "dwRedisTemplate")
     private RedisTemplate redisTemplate;
 
-    public UserDo dto2Do(UserDto userDto){
+    public UserDo dto2Do(LoginDto loginDto){
         UserDo userDo = new UserDo();
-        BeanUtils.copyProperties(userDto,userDo);
-        return userDo;
+        if(loginDto != null){
+            BeanUtils.copyProperties(loginDto,userDo);
+            return userDo;
+        }
+        return null;
     }
 
-    public UserVo do2Vo(UserDo userDo){
-        UserVo userVo = new UserVo();
-        BeanUtils.copyProperties(userDo,userVo);
-        return userVo;
+    public LoginVo do2Vo(UserDo userDo){
+        LoginVo loginVo = new LoginVo();
+        if(userDo != null){
+            BeanUtils.copyProperties(userDo, loginVo);
+            return loginVo;
+        }
+        return null;
     }
 
     @Override
-    public Long saveUser(UserDto userDto) {
-        UserDo userDo = dto2Do(userDto);
+    public UserDo saveUser(LoginDto loginDto) {
+        UserDo userDo = dto2Do(loginDto);
+        // 获取全局递增id
+        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+        userDo.setId(String.valueOf(idWorker.nextId()));
+        // TODO 生成二维码
+        userDo.setQrCode("");
+        // nickname
+        userDo.setNickName(loginDto.getUsername());
+        // face_image
+        userDo.setFaceImage("");
+        userDo.setFaceImageBig("");
         userDao.save(userDo);
-        return userDo.getId();
+        return userDo;
     }
 
     @Override
@@ -63,17 +82,51 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserVo findByUserId(Long userId) {
+    public LoginVo findByUserId(String userId) {
         if(redisTemplate.opsForHash().hasKey("user",userId+"")){
             logger.info("【走redis缓存取数据】");
-            UserVo userVo = (UserVo) redisTemplate.opsForHash().get("user",userId+"");
-            return userVo;
+            LoginVo loginVo = (LoginVo) redisTemplate.opsForHash().get("user",userId+"");
+            return loginVo;
         }
         UserDo userDo = userDao.findById(userId);
-        UserVo userVo = do2Vo(userDo);
-        redisTemplate.opsForHash().put("user",userId+"",userVo);
+        LoginVo loginVo = do2Vo(userDo);
+        redisTemplate.opsForHash().put("user",userId+"", loginVo);
         redisTemplate.expire("user",20, TimeUnit.MINUTES);
-        return userVo;
+        return loginVo;
+    }
+
+    @Override
+    public LoginVo findByUserName(String username) {
+        UserDo userDo = userDao.findByUserName(username);
+        LoginVo loginVo = do2Vo(userDo);
+        return loginVo;
+    }
+
+    @Override
+    public ResultBean registOrLogin(LoginDto loginDto) throws Exception {
+        LoginVo loginVo = findByUserName(loginDto.getUsername());
+        if(loginVo != null){
+            // 登陆校验
+            UserDo userDo = userDao.findByUserNameAndPassword(loginDto.getUsername(),MD5Utils.getMD5Str(loginDto.getPassword()));
+            if(userDo != null){
+                logger.info(loginDto.getUsername() + "--> 登陆成功");
+                return new ResultBean().success("登陆成功", loginVo);
+            }else{
+                logger.info(loginDto.getUsername() + "--> 用户名或密码错误");
+                return new ResultBean().faild("用户名或密码错误");
+            }
+        }else{
+            // 注册
+            loginDto.setPassword(MD5Utils.getMD5Str(loginDto.getPassword()));
+            UserDo userDo = this.saveUser(loginDto);
+            logger.info(loginDto.getUsername() + "--> 注册成功");
+            return new ResultBean().success("注册成功",do2Vo(userDo));
+        }
+    }
+
+    @Override
+    public ResultBean myFriends(String userId) {
+        return null;
     }
 
 

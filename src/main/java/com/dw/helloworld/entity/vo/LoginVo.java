@@ -1,4 +1,4 @@
-package com.dw.helloworld.entity.dobean;
+package com.dw.helloworld.entity.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * @Description: 用户实体对象
+ * @Description: TODO
  * @Author: DING WEI
- * @Date: 2019-03-31 14:30
+ * @Date: 2019-04-02 21:14
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDo implements Serializable {
+public class LoginVo implements Serializable {
 
-    private static final long serialVersionUID = 3592357977451229873L;
+    private static final long serialVersionUID = -4043583975810906988L;
 
     private String id;
 
@@ -39,6 +39,5 @@ public class UserDo implements Serializable {
      * 客户端唯一编码（设备号）
      */
     private String cid;
-
 
 }

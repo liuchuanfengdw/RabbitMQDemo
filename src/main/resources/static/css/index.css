@@ -1,0 +1,67 @@
+#chat{
+    width: 60%;
+    position: relative;
+    margin: 0 auto;
+}
+#online{
+    position: absolute;
+    border: 1px solid;
+    width: 19%;
+    float: left;
+}
+#message{
+    position: absolute;
+    border: 1px solid;
+    width: 79%;
+    height: 615px;
+    margin-left: 20%;
+}
+#textDiv{
+    position: absolute;
+    height: 130px;
+    bottom: 44px;
+    width: 99%;
+}
+#text{
+    border: 1px solid black;
+    font-size: 175%;
+    width: 100%;
+    height: 130px;
+}
+#buttenArea{
+    position: absolute;
+    border: 1px solid;
+    height: 40px;
+    bottom: -5px;
+    width: 99%;
+}
+button{
+    height: 40px;
+    vertical-align: top;
+    width: 80px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: none;
+    background: #B3D33F;
+    color: #fff;
+}
+.msg{
+    background-color: darkgrey;
+    border: solid 3px darkgrey;
+    border-radius: 5px;
+}
+#toPeople{
+    border-bottom: 1px solid;
+    height: 35px;
+}
+
+img{
+    width: 20px;
+    border: 1px solid;
+    height: 20px;
+    margin-left: -33px;
+    margin-bottom: 10px;
+}
+.tip{
+    font-size: 50%;
+}

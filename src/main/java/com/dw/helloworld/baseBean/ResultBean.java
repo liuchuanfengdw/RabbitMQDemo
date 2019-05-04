@@ -33,4 +33,10 @@ public class ResultBean<T> {
         this.data = data;
         return this;
     }
+
+    public ResultBean faild(String msg){
+        this.code = 0;
+        this.msg = msg;
+        return this;
+    }
 }

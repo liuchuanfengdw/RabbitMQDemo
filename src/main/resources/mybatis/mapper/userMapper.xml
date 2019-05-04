@@ -4,21 +4,62 @@
 <mapper namespace="com.dw.helloworld.dao.UserDao">
 
     <insert id="save" parameterType="com.dw.helloworld.entity.dobean.UserDo" keyProperty="id" useGeneratedKeys="true">
-        insert into user (id,name,age) values (null,#{name},#{age})
+        insert into chat_users
+            (id,
+            username,
+            password,
+            face_image,
+            face_image_big,
+            nickname,
+            qrcode,
+            cid)
+        values
+            (#{id},
+            #{username},
+            #{password},
+            #{faceImage},
+            #{faceImageBig},
+            #{nickName},
+            #{qrCode},
+            #{cid})
     </insert>
 
     <insert id="saveBatch" parameterType="list">
-        insert into user (id,name,age) values
+        insert into chat_users
+            (id,
+            username,
+            password,
+            face_image,
+            face_image_big,
+            nickname,
+            qrcode,
+            cid)
+        values
         <foreach collection="list" item="user" separator=",">
-            (null,#{user.name},#{user.age})
+            (#{id},
+            #{username},
+            #{password},
+            #{faceImage},
+            #{faceImageBig},
+            #{nickName},
+            #{qrCode},
+            #{cid})
         </foreach>
     </insert>
 
     <select id="findAll" resultType="map">
-        select * from user
+        select * from chat_users
     </select>
 
-    <select id="findById" parameterType="long" resultType="com.dw.helloworld.entity.dobean.UserDo">
-        select * from user where id = #{id}
+    <select id="findById" parameterType="string" resultType="com.dw.helloworld.entity.dobean.UserDo">
+        select * from chat_users where id = #{id}
+    </select>
+
+    <select id="findByUserName" parameterType="string" resultType="com.dw.helloworld.entity.dobean.UserDo">
+        select * from chat_users where username = #{username}
+    </select>
+
+    <select id="findByUserNameAndPassword" parameterType="string" resultType="com.dw.helloworld.entity.dobean.UserDo">
+        select * from chat_users where username = #{username} and password = #{password}
     </select>
 </mapper>

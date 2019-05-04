@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dw.helloworld.dao.MyFriendsDao">
+
+    <select id="findMyFriends" parameterType="string" resultType="com.dw.helloworld.entity.dobean.MyFriendsDo">
+        select * from chat_my_friends where my_user_id = #{userId}
+    </select>
+
+</mapper>

@@ -1,6 +1,6 @@
 package com.dw.helloworld.config;
 
-import com.dw.helloworld.entity.dto.UserDto;
+import com.dw.helloworld.entity.dto.LoginDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -19,8 +19,8 @@ public class MsgReceiver {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RabbitHandler
-    public void process(UserDto userDto){
-        logger.info("消费队列A中的消息:"+userDto.toString());
+    public void process(LoginDto loginDto){
+        logger.info("消费队列A中的消息:"+ loginDto.toString());
     }
 
 
